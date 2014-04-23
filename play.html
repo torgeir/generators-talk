@@ -1,0 +1,11 @@
+<!doctype html>
+<meta charset=utf-8>
+<title>play with es6</title>
+<script src="https://traceur-compiler.googlecode.com/git/bin/traceur.js"></script>
+<script src="https://traceur-compiler.googlecode.com/git/src/bootstrap.js"></script>
+<script> traceur.options.experimental = true; </script>
+
+<script type="module">
+  let add = (a, b) => a + b;
+  document.body.innerText = add(1, 2);
+</script>

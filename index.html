@@ -1,0 +1,202 @@
+<!doctype html>
+<meta charset=utf-8>
+<title>es6 generators</title>
+<link rel="stylesheet" href="style.css"></link>
+
+<textarea id="source">
+layout: true
+name: part
+class: inverse, center, middle
+---
+template: part
+# es6 generators
+---
+template: part
+# what do you need?
+---
+layout: false
+# node
+
+node version >= 0.11.0
+
+```js
+node --harmony some-es6-code.js
+```
+
+# or
+
+```js
+npm install traceur
+traceur some-es6-code.js
+```
+---
+# browser
+
+```html
+<!doctype html>
+<meta charset=utf-8>
+<title>play with es6</title>
+<script src="https://traceur-compiler.googlecode.com/git/bin/traceur.js"></script>
+<script src="https://traceur-compiler.googlecode.com/git/src/bootstrap.js"></script>
+<script> traceur.options.experimental = true; </script>
+
+<script type="module">
+  // some es6 code
+</script>
+```
+---
+template: part
+# generators
+---
+class: center, middle
+.code.code--large.code--transparent.code--center[
+  ```js
+  function fun () {
+
+  }
+  ```
+]
+---
+class: center, middle
+.code.code--large.code--transparent.code--center[
+  ```js
+  function * gen () {
+
+  }
+  ```
+]
+---
+class: center, middle
+.code.code--large.code--transparent.code--center[
+  ```js
+  var fun = function () {
+
+  };
+  ```
+]
+---
+class: center, middle
+.code.code--large.code--transparent.code--center[
+  ```js
+  var gen = function * () {
+
+  };
+  ```
+]
+---
+template: part
+# two methods
+---
+class: center, middle
+.code.code--large.code--transparent.code--center[
+  ```js
+  var iterator = gen();
+  // {
+  //   next: [Function],
+  //   throw: [Function]
+  // }
+  ```
+]
+---
+class: center, middle
+.code.code--large.code--transparent.code--center[
+  ```js
+  iterator.next();
+  // {
+  //   value: undefined,
+  //   done: true
+  // }
+  ```
+]
+---
+class: center, middle
+.code.code--large.code--transparent.code--center[
+  ```js
+  iterator.throw(
+    new Error("wat"));
+  // Error: wat
+  //   at ...
+  ```
+]
+---
+class: center, middle
+.code.code--large.code--transparent.code--center[
+  ```js
+  for (var n of iterator) {
+
+  }
+  ```
+]
+---
+template: part
+# and a keyword
+---
+class: center, middle
+.code.code--large.code--transparent.code--center[
+  ```js
+  yield
+  ```
+]
+---
+template: part
+# using a generator
+---
+class: center, middle
+.code.code--medium.code--transparent.code--center[
+  ```js
+  function * gen () {
+    yield 1;
+    yield 2;
+  };
+
+  var iterator = gen();
+  gen.next(); // { value: 1, done: false }
+  gen.next(); // { value: 2, done: false }
+  gen.next(); // { value: undefined, done: true }
+
+  gen.next();
+  // Error: "next" on closed generator
+  //   at ...
+  ```
+]
+---
+class: center, middle
+.code.code--large.code--transparent.code--center[
+  ```js
+  var iterator = gen();
+  for (var i of iterator) {
+    console.log(i);
+  }
+
+  // 1
+  // 2
+  ```
+]
+---
+class: center, middle
+.code.code--medium.code--transparent.code--center[
+  ```js
+  function * fibonacci () {
+    var n = 0, m = 1;
+
+    while (true) {
+      yield n;
+      [n, m] = [m, n + m];
+    }
+  };
+
+  // for (var i of fibonacci()) {
+  //   console.log(i);
+  // }
+  ```
+]
+</textarea>
+
+<script src="http://gnab.github.io/remark/downloads/remark-latest.min.js" type="text/javascript">
+</script>
+<script type="text/javascript">
+  remark.create({
+    highlightStyle: 'monokai',
+    highlightLanguage: 'no-highlight'
+  });
+</script>
