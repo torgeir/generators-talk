@@ -114,11 +114,18 @@ code {
 .half  { width: 50%; }
 .third { width: 33%; }
 
+.remark-slide-number {
+  font-family: 'Yanone Kaffeesatz';
+}
+.remark-slide-content {
+  text-align: center;
+  padding-top: 4em;
+}
 .remark-code {
   text-align: left;
 }
 .code--medium .remark-code {
-  font-size: 1.2em;
+  font-size: 1.12em;
 }
 .code--large .remark-code {
   font-size: 2em;
@@ -130,4 +137,19 @@ code {
 .code--center {
   margin: 0 auto;
   width: 100%;
+}
+
+em {
+  color: #f92672;
+  font-style: normal;
+}
+
+ul li {
+  margin: 0.5em;
+}
+
+.bartjs {
+  margin: 0 auto;
+  margin-top: 3.5em;
+  max-width: 5em;
 }

@@ -3,33 +3,45 @@
 <title>es6 generators</title>
 <link rel="stylesheet" href="style.css"></link>
 
+<script src="https://traceur-compiler.googlecode.com/git/bin/traceur.js"></script>
+<script src="https://traceur-compiler.googlecode.com/git/src/bootstrap.js"></script>
+<script> traceur.options.experimental = true; </script>
+
+<script type="module">
+  $$ = document.querySelectorAll.bind(document);
+  $$('.code').forEach(el => {
+    el.addEventListener('dblclick', () => {
+      var script = `console.clear(); ${el.textContent}`;
+
+      var t = new traceur.WebPageTranscoder();
+      t.url = 'w.t.f';
+      t.addFileFromScriptElement(null, "some-name-"+Math.random(), script);
+      t.run();
+    }, true);
+  });
+</script>
+
 <textarea id="source">
 layout: true
 name: part
-class: inverse, center, middle
+class: inverse
 ---
 template: part
+
 # es6 generators
+
+<object class="bartjs" data="http://bartjs.github.io/assets/logo.svg" id="svg" type="image/svg+xml">bartjs</object> 
+
+???
+
+- ny funksjonalitet i es6
+- iteratorer og generatorer som en del av språket
+- slik det er implementert byr det også på mer interessante bruksområder, enn bare looping
 ---
 template: part
 # what do you need?
 ---
 layout: false
-# node
-
-node version >= 0.11.0
-
-```js
-node --harmony some-es6-code.js
-```
-
-# or
-
-```js
-npm install traceur
-traceur some-es6-code.js
-```
----
 # browser
 
 ```html
@@ -45,19 +57,52 @@ traceur some-es6-code.js
 </script>
 ```
 ---
-template: part
-# generators
----
-class: center, middle
-.code.code--large.code--transparent.code--center[
-  ```js
-  function fun () {
+# node
 
-  }
-  ```
-]
+node version >= 0.11.0
+
+```js
+node --harmony some-es6-code.js
+```
+
+## or
+
+```js
+npm install traceur
+traceur some-es6-code.js
+```
 ---
-class: center, middle
+template: part
+# ***,
+# a keyword,
+# two methods,
+# and a loop.
+
+???
+
+- nye deler av språket som kommer med generators
+
+---
+template: part
+# return a value and *suspend* a function
+# *resume* a function with a value
+# throw an exception *into* a function
+
+???
+
+- Generators lar deg returnere en verdi og pause en funksjon
+- Contexten lagres, så variabler i scope beholdes, med verdier
+- En slik funksjon kan fortsettes, og senere pauses igjen
+- Man kan sende en verdi inn til den når den fortsettes
+- Istedet for å gi den en verdi, kan man kaste en exception inn i funksjonen
+
+---
+template: part
+<img src="mind-blown.gif" style="margin-top: 1em; width: 50%; height: 50%">
+---
+template: part
+# an example
+---
 .code.code--large.code--transparent.code--center[
   ```js
   function * gen () {
@@ -65,29 +110,28 @@ class: center, middle
   }
   ```
 ]
+
+???
+
+- en generator defineres med `*`
+
 ---
-class: center, middle
 .code.code--large.code--transparent.code--center[
   ```js
-  var fun = function () {
-
-  };
+  function * gen () {
+    yield 42;
+  }
   ```
 ]
----
-class: center, middle
-.code.code--large.code--transparent.code--center[
-  ```js
-  var gen = function * () {
 
-  };
-  ```
-]
+???
+
+betyr egentlig
+- når noen ber om en verdi, kjør til `yield`
+- returner 42
+- og pause funksjonen
+
 ---
-template: part
-# two methods
----
-class: center, middle
 .code.code--large.code--transparent.code--center[
   ```js
   var iterator = gen();
@@ -97,74 +141,99 @@ class: center, middle
   // }
   ```
 ]
+
+???
+
+- iteratoren man får når man kaller en generator
+
 ---
-class: center, middle
-.code.code--large.code--transparent.code--center[
-  ```js
-  iterator.next();
-  // {
-  //   value: undefined,
-  //   done: true
-  // }
-  ```
-]
----
-class: center, middle
-.code.code--large.code--transparent.code--center[
-  ```js
-  iterator.throw(
-    new Error("wat"));
-  // Error: wat
-  //   at ...
-  ```
-]
----
-class: center, middle
 .code.code--large.code--transparent.code--center[
   ```js
   for (var n of iterator) {
-
+    console.log(n); // 42
   }
   ```
 ]
 ---
 template: part
-# and a keyword
+# manual iteration
 ---
-class: center, middle
 .code.code--large.code--transparent.code--center[
-  ```js
-  yield
-  ```
-]
----
-template: part
-# using a generator
----
-class: center, middle
-.code.code--medium.code--transparent.code--center[
   ```js
   function * gen () {
     yield 1;
     yield 2;
   };
+  ```
+]
 
-  var iterator = gen();
-  gen.next(); // { value: 1, done: false }
-  gen.next(); // { value: 2, done: false }
-  gen.next(); // { value: undefined, done: true }
+???
 
-  gen.next();
+- en funksjon kan `yield`e flere ganger
+
+---
+.code.code--medium.code--transparent.code--center[
+  ```js
+  var iter = gen();
+  ```
+]
+
+???
+
+- `gen()` initialiserer iteratoren
+
+--
+
+.code.code--medium.code--transparent.code--center[
+  ```js
+  iter.next();
+  // { value: 1, done: false }
+  ```
+]
+
+???
+
+- `.next()` kjører til første `yield`
+- funksjonen pauses helt til man kaller `.next()` igjen
+
+--
+.code.code--medium.code--transparent.code--center[
+  ```js
+  iter.next();
+  // { value: 2, done: false }
+  ```
+]
+
+--
+.code.code--medium.code--transparent.code--center[
+  ```js
+  iter.next();
+  // { value: undefined, done: true }
+  ```
+]
+
+???
+
+- iteratoren varsler at den er ferdig, med `done`
+
+--
+.code.code--medium.code--transparent.code--center[
+  ```js
+  iter.next();
   // Error: "next" on closed generator
   //   at ...
   ```
 ]
+
+???
+
+- `.next()` når den er `done`, så smeller det
+
 ---
-class: center, middle
-.code.code--large.code--transparent.code--center[
+.code.code--medium.code--transparent.code--center[
   ```js
-  var iterator = gen();
-  for (var i of iterator) {
+  var iter = gen();
+  for (var i of iter) {
     console.log(i);
   }
 
@@ -172,8 +241,91 @@ class: center, middle
   // 2
   ```
 ]
+
+???
+
+- for-loopen skjønner iteratorer
+- kaller `.next()` til den er `done`
+
 ---
-class: center, middle
+template: part
+# infinite sequences
+---
+.code.code--medium.code--transparent.code--center[
+  ```js
+  function natural () {
+    var numbers = [];
+
+    var n = 1;
+    while (true) {
+      numbers.push(n++);
+    }
+
+    return numbers;
+  }
+
+  // for (var n of natural()) {
+  //   console.log(n);
+  // }
+  ```
+]
+
+???
+
+- kommer aldri til loopen, der vi vil logge
+
+---
+.code.code--medium.code--transparent.code--center[
+  ```js
+  function * natural () {
+    var n = 1;
+    while (true) {
+      yield n++;
+    }
+  }
+
+  // for (var n of natural()) {
+  //   console.log(n);
+  // }
+  ```
+]
+
+???
+
+- fordi generators er lazy kan vi faktisk gjøre det her
+- representert en uendelig sekvens
+- hver `.next()` kjører bare til neste yield
+- kjører ikke videre før man kaller `.next()` igjen
+- fortsatt dårlig suksess i en loop
+
+---
+.code.code--medium.code--transparent.code--center[
+  ```js
+  function * take (n, list) {
+    var i = 0;
+    for (var x of list) {
+      if (n === i++) {
+        return;
+      }
+      yield x;
+    }
+  }
+  ```
+]
+---
+.code.code--medium.code--transparent.code--center[
+  ```js
+  for (var n of take(5, natural())) {
+    console.log(n);
+  }
+  // 1
+  // 2
+  // 3
+  // 4
+  // 5
+  ```
+]
+---
 .code.code--medium.code--transparent.code--center[
   ```js
   function * fibonacci () {
@@ -185,10 +337,127 @@ class: center, middle
     }
   };
 
-  // for (var i of fibonacci()) {
-  //   console.log(i);
-  // }
+  for (var i of take(100, fibonacci())) {
+    console.log(i);
+  }
   ```
+]
+---
+template: part
+# a fibonacci generator
+
+<img src="falling-asleep.gif">
+
+# *how useful*
+---
+template: part
+# code
+---
+template: part
+# make yield *wait for async operation*
+# *return a result* from yield
+# throw error into a generator to *handle errors synchronously*
+---
+template: part
+# promises
+---
+.code.code--medium.code--transparent.code--center[
+  ```js
+    var Promise = require('promise');
+    var request = require('request');
+
+    function get (url) {
+
+      return new Promise(function (resolve, reject) {
+
+        request(url, function (err, response) {
+          if (err) reject(err);
+          else resolve(response.body);
+        });
+      });
+    }
+  ```
+]
+
+---
+.code.code--medium.code--transparent.code--center[
+  ```js
+    var vg = get('http://www.vg.no');
+    var google = get('http://www.google.com');
+
+    Promise
+      .all([vg, google])
+      .then(
+
+        function (htmls) {
+          console.log(htmls[0].substr(0, 30));
+          console.log(htmls[1].substr(0, 30));
+        },
+
+        function (error) {
+          ...
+        });
+  ```
+]
+---
+template: part
+# generators and promises *combined*
+---
+.code.code--medium.code--transparent.code--center[
+  ```js
+    async(function * () {
+
+      try {
+        var vg = yield get('http://www.vg.no');
+        var google = yield get('http://www.google.no');
+
+        console.log('vg', vg.substr(0, 30));
+        console.log('google', google.substr(0, 30));
+      }
+      catch (error) {
+        console.log('something blew up');
+      }
+    });
+  ```
+]
+---
+.code.code--medium.code--transparent.code--center[
+  ```js
+    function async (generator) {
+      var iterator = generator();
+
+      function move (result) {
+        if (result.done) {
+          result.value;
+        }
+
+        return result.value.then(
+          function (promiseResult) {
+            return move(iterator.next(promiseResult));
+          },
+          function (promiseError) {
+            return move(iterator.throw(promiseError));
+          });
+      }
+
+      return move(iterator.next());
+    }
+  ```
+]
+---
+template: part
+# Generators + Promises *<3*
+
+<img src="happy.jpg" style="max-width: 50%">
+---
+template: part
+# *@*<a href="http://github.com/torgeir" style="color: white">torgeir</a>
+.left[
+## References
+- Forbes Lindsey - Control flow utopia<br>https://www.youtube.com/watch?v=qbKWsbJ76-s
+- Promise<br>https://github.com/then/promise
+- Request<br>https://github.com/mikeal/request
+- Async functions<br>http://wiki.ecmascript.org/doku.php?id=strawman:async_functions
 ]
 </textarea>
 

@@ -1,0 +1,35 @@
+{
+  "name": "generators-talk",
+  "version": "0.0.1",
+  "description": "BartJS-talk on generators.",
+  "main": "some-es6-code.js",
+  "directories": {
+    "example": "examples"
+  },
+  "dependencies": {
+    "promise": "~5.0.0",
+    "request": "~2.34.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/torgeir/generators-talk.git"
+  },
+  "keywords": [
+    "generators",
+    "yield",
+    "infinite",
+    "sequences",
+    "fibonacci",
+    "promises"
+  ],
+  "author": "@torgeir",
+  "license": "mit",
+  "bugs": {
+    "url": "https://github.com/torgeir/generators-talk/issues"
+  },
+  "homepage": "https://github.com/torgeir/generators-talk"
+}
