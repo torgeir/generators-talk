@@ -1,26 +1,3 @@
-function runner (generator) {
-  var iter = generator(move);
-  move();
-
-  function move (value) {
-    var result = iter.next(value);
-    if (result.done) {
-      console.log(result.value);
-    }
-  }
-}
-
-runner(function * (next) {
-  yield setTimeout(next, 1000);
-  console.log('waited 1');
-
-  yield setTimeout(next, 2000);
-  console.log('waited 2');
-
-  return 42;
-});
-
-
 var Promise = require('promise');
 var request = require('request');
 
@@ -34,20 +11,6 @@ function get (url) {
     });
   });
 }
-
-var vg = get('http://www.vg.no');
-var google = get('http://www.google.com');
-
-Promise
-  .all([vg, google])
-  .then(
-    function (res) {
-      console.log(res[0].substr(0, 20),
-                  res[1].substr(0, 20));
-    },
-    function (error) {
-      console.error("something blew up", error);
-    });
 
 function async (generator) {
   var iterator = generator();
