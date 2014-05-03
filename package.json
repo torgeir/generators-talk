@@ -1,7 +1,7 @@
 {
   "name": "generators-talk",
   "version": "0.0.1",
-  "description": "BartJS-talk on generators.",
+  "description": "BartJS-talk on generators. Presentation in gh-pages branch.",
   "main": "some-es6-code.js",
   "directories": {
     "example": "examples"
