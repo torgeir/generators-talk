@@ -1,13 +1,13 @@
-
-function async (generator) {
+function runner(generator) {
 
   var iter = generator(move);
   move();
 
   function move (value) {
     var result = iter.next(value);
+
     if (result.done) {
-      console.log('all done');
+      console.log(result.value);
     }
   }
 }
@@ -19,13 +19,11 @@ function wait (seconds, fn) {
   }, seconds * 1000);
 }
 
-// async(function * (next) {
-//   yield wait(2, next);
-//   yield wait(3, next);
-//   console.log('synchronous async code');
-// });
-
-////
+runner(function * (next) {
+  yield wait(2, next);
+  yield wait(3, next);
+  return 42;
+});
 
 var Promise = require('promise');
 var request = require('request');
@@ -41,13 +39,13 @@ function get (url) {
   });
 }
 
-// var vg = get('http://www.vg.no');
-// var google = get('http://www.google.com');
-//
-// Promise.all([vg, google]).then(function (res) {
-//   console.log(res[0].substr(0, 20),
-//               res[1].substr(0, 20));
-// })
+var vg = get('http://www.vg.no');
+var google = get('http://www.google.com');
+
+Promise.all([vg, google]).then(function (res) {
+  console.log(res[0].substr(0, 20),
+              res[1].substr(0, 20));
+});
 
 function async (generator) {
   var iterator = generator();

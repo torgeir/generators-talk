@@ -132,16 +132,11 @@ en generator funksjon
 template: part
 # mind *blown*
 
-<img src="mind-blown-barny.gif" style="margin-top: 1em; width: 90%;">
+<img src="mind-blown.gif" style="margin-top: 1em; width: 40%;">
 
 ???
 
 - hører det her for første gang
----
-template: part
-# mind *blown*
-
-<img src="mind-blown.gif" style="margin-top: 1em; width: 40%;">
 
 ---
 template: part
@@ -400,9 +395,24 @@ template: part
 template: part
 # code
 ## yield
-## .next()
-## .throws()
-## async
+## .next(value)
+## .throw(error)
+## "*synchronous* asynchronous code"?
+
+???
+
+- asynkron kode som ser synkron ut
+
+---
+template: part
+# mind *blown*
+
+<img src="mind-blown-barny.gif" style="margin-top: 1em; width: 90%;">
+---
+template: part
+# make yield *wait for async operation*
+# *return a result* from yield
+# throw error into a generator to *handle errors synchronously*
 ---
 template: part
 # promises
@@ -462,11 +472,6 @@ template: part
 - log begge
 - husk å håndter feil
 
----
-template: part
-# make yield *wait for async operation*
-# *return a result* from yield
-# throw error into a generator to *handle errors synchronously*
 ---
 template: part
 # generators and promises *combined*
