@@ -3,12 +3,16 @@
 <title>es6 generators</title>
 <link rel="stylesheet" href="style.css"></link>
 
+<script>
+  $ = document.querySelector.bind(document);
+  $$ = document.querySelectorAll.bind(document);
+</script>
+
 <script src="https://traceur-compiler.googlecode.com/git/bin/traceur.js"></script>
 <script src="https://traceur-compiler.googlecode.com/git/src/bootstrap.js"></script>
 <script> traceur.options.experimental = true; </script>
 
 <script type="module">
-  $$ = document.querySelectorAll.bind(document);
   $$('.code').forEach(el => {
     el.addEventListener('dblclick', () => {
       var script = `console.clear(); ${el.textContent}`;
@@ -37,6 +41,14 @@ template: part
 - ny funksjonalitet i es6
 - iteratorer og generatorer som en del av språket
 - slik det er implementert byr det også på mer interessante bruksområder, enn bare looping
+
+agenda
+- først en liten intro til hva det er
+- eksempler
+- litt demo, koding
+- kreativ bruk
+- vise en måte å skrive asynkron kode på som man egentlig bare har drømt om i javascript
+
 ---
 template: part
 # what do you need?
@@ -68,7 +80,7 @@ node --harmony some-es6-code.js
 ## or
 
 ```js
-npm install traceur
+npm install -g traceur
 traceur some-es6-code.js
 ```
 ---
@@ -80,8 +92,25 @@ template: part
 
 ???
 
-- nye deler av språket som kommer med generators
+nye deler av språket som kommer med generators
+- stjerne - brukes i deklarasjonen av en generator
+- ett nytt keyword - for å si at en generator skal gi en ny verdi
+- to metoder - håndtere flyten i en generator
+- en ny type loop, som kan loope alt mulig, også generators
+---
+.code.code--large.code--transparent.code--center[
+  ```js
+  function * gen () {
+    yield 42;
+  }
 
+  var iterator = gen();
+
+  for (var i of iterator) {
+    console.log(i);
+  }
+  ```
+]
 ---
 template: part
 # return a value and *suspend* a function
@@ -90,15 +119,30 @@ template: part
 
 ???
 
-- Generators lar deg returnere en verdi og pause en funksjon
-- Contexten lagres, så variabler i scope beholdes, med verdier
-- En slik funksjon kan fortsettes, og senere pauses igjen
-- Man kan sende en verdi inn til den når den fortsettes
-- Istedet for å gi den en verdi, kan man kaste en exception inn i funksjonen
+en generator funksjon
+
+- kan som en vanlig funksjon, returnere en verdi
+- men funksjonen kan pauses
+- contexten lagres, så variabler i scope beholdes, med verdier, etc.
+- fortsette en slik funksjon, og senere pauses igjen
+- man kan sende en verdi inn til den når den fortsettes
+- istedet for å gi den en verdi, kan man kaste en exception inn i funksjonen
 
 ---
 template: part
-<img src="mind-blown.gif" style="margin-top: 1em; width: 50%; height: 50%">
+# mind *blown*
+
+<img src="mind-blown-barny.gif" style="margin-top: 1em; width: 90%;">
+
+???
+
+- hører det her for første gang
+---
+template: part
+# mind *blown*
+
+<img src="mind-blown.gif" style="margin-top: 1em; width: 40%;">
+
 ---
 template: part
 # an example
@@ -163,6 +207,7 @@ template: part
   function * gen () {
     yield 1;
     yield 2;
+    return 42;
   };
   ```
 ]
@@ -194,6 +239,8 @@ template: part
 ???
 
 - `.next()` kjører til første `yield`
+- får ut `value`, det som yield'es
+- og en property `done`, som sier om iteratoren er ferdig
 - funksjonen pauses helt til man kaller `.next()` igjen
 
 --
@@ -208,7 +255,7 @@ template: part
 .code.code--medium.code--transparent.code--center[
   ```js
   iter.next();
-  // { value: undefined, done: true }
+  // { value: 42, done: true }
   ```
 ]
 
@@ -230,7 +277,7 @@ template: part
 - `.next()` når den er `done`, så smeller det
 
 ---
-.code.code--medium.code--transparent.code--center[
+.code.code--large.code--transparent.code--center[
   ```js
   var iter = gen();
   for (var i of iter) {
@@ -246,6 +293,7 @@ template: part
 
 - for-loopen skjønner iteratorer
 - kaller `.next()` til den er `done`
+- får bare verdier som er yield'et
 
 ---
 template: part
@@ -297,7 +345,6 @@ template: part
 - hver `.next()` kjører bare til neste yield
 - kjører ikke videre før man kaller `.next()` igjen
 - fortsatt dårlig suksess i en loop
-
 ---
 .code.code--medium.code--transparent.code--center[
   ```js
@@ -348,15 +395,14 @@ template: part
 
 <img src="falling-asleep.gif">
 
-# *how useful*
+# how *useful*
 ---
 template: part
 # code
----
-template: part
-# make yield *wait for async operation*
-# *return a result* from yield
-# throw error into a generator to *handle errors synchronously*
+## yield
+## .next()
+## .throws()
+## async
 ---
 template: part
 # promises
@@ -379,6 +425,16 @@ template: part
   ```
 ]
 
+???
+
+- en liten recap
+- funksjon `get`
+- tar en url som parameter
+- returnerer et promise
+- gjør en request mot url'en
+- rejecter det, hvis feil
+- resolver det, hvis resultatet (og da med body på responsen)
+
 ---
 .code.code--medium.code--transparent.code--center[
   ```js
@@ -395,10 +451,22 @@ template: part
         },
 
         function (error) {
-          ...
+          console.log('something blew up');
         });
   ```
 ]
+
+???
+
+- vent på svar fra `vg.no` og `google.com`
+- log begge
+- husk å håndter feil
+
+---
+template: part
+# make yield *wait for async operation*
+# *return a result* from yield
+# throw error into a generator to *handle errors synchronously*
 ---
 template: part
 # generators and promises *combined*
@@ -464,7 +532,7 @@ template: part
 <script src="http://gnab.github.io/remark/downloads/remark-latest.min.js" type="text/javascript">
 </script>
 <script type="text/javascript">
-  remark.create({
+  var slideshow = remark.create({
     highlightStyle: 'monokai',
     highlightLanguage: 'no-highlight'
   });
