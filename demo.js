@@ -11,4 +11,4 @@ function * gen () {
 
 // .throw(error)
 
-// "synchronous asynchronous code"?
+// asynchronous code?
