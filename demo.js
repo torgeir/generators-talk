@@ -1,18 +1,14 @@
-function * gen() {
-  console.log(yield 1);
-  console.log(yield 2);
+
+function * gen () {
+  yield 1;
+  yield 2;
   return 42;
 }
 
 // yield
 
+// .next(value)
 
-// .next()
+// .throw(error)
 
-
-// .throws()
-
-
-// async
-
-
+// "synchronous asynchronous code"?

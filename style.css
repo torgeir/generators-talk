@@ -139,6 +139,10 @@ code {
   width: 100%;
 }
 
+.footnote {
+  font-size: 0.6em;
+}
+
 em {
   color: #f92672;
   font-style: normal;

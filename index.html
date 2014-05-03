@@ -315,6 +315,7 @@ template: part
 
 ???
 
+- noe man ikke har kunnet uttrykt i js hittil
 - kommer aldri til loopen, der vi vil logge
 
 ---
@@ -352,11 +353,7 @@ template: part
       yield x;
     }
   }
-  ```
-]
----
-.code.code--medium.code--transparent.code--center[
-  ```js
+
   for (var n of take(5, natural())) {
     console.log(n);
   }
@@ -384,6 +381,12 @@ template: part
   }
   ```
 ]
+
+???
+
+- tøft?
+- men likevel litt ...
+
 ---
 template: part
 # a fibonacci generator
@@ -393,11 +396,11 @@ template: part
 # how *useful*
 ---
 template: part
-# code
+# *code*
 ## yield
 ## .next(value)
 ## .throw(error)
-## "*synchronous* asynchronous code"?
+## asynchronous code?
 
 ???
 
@@ -413,9 +416,25 @@ template: part
 # make yield *wait for async operation*
 # *return a result* from yield
 # throw error into a generator to *handle errors synchronously*
+
+???
+
+- allerede ganske tøft, mind boggling
+- men vi kan klare enda bedre?
 ---
 template: part
-# promises
+# sounds like a..
+
+# *promise*?
+
+???
+
+høres ikke det ut som et promise?
+
+- vente på en asynk operasjon
+- få tilbake et resultat
+- må huske å håndtere feil
+- men kan feilhåndteringa bli enda enklere?
 ---
 .code.code--medium.code--transparent.code--center[
   ```js
@@ -461,7 +480,7 @@ template: part
         },
 
         function (error) {
-          console.log('something blew up');
+          console.error('something blew up', error);
         });
   ```
 ]
@@ -488,11 +507,16 @@ template: part
         console.log('google', google.substr(0, 30));
       }
       catch (error) {
-        console.log('something blew up');
+        console.error('something blew up', error);
       }
     });
   ```
 ]
+
+???
+
+- hva om jeg sa at asynkron kode kunne se sånn ut?
+- det kan den faktisk!
 ---
 .code.code--medium.code--transparent.code--center[
   ```js
@@ -501,7 +525,7 @@ template: part
 
       function move (result) {
         if (result.done) {
-          result.value;
+          return result.value;
         }
 
         return result.value.then(
@@ -517,20 +541,42 @@ template: part
     }
   ```
 ]
+
+.footnote[*@*<a href="http://twitter.com/ForbesLindesay" style="color: black">ForbesLindesay</a>]
+
+???
+
+- yielder alltid et promise, så result.value er alltid et promise
+- setter inn `promiseResult` som resultat av yield
+- fortsetter
+- kaster en evt feilmelding tilbake inn i generatoren
+- fortsetter
+- håndterer evt flere yields
+- håndterer evt yield fra en catch
 ---
 template: part
 # Generators + Promises *<3*
 
-<img src="happy.jpg" style="max-width: 50%">
+<img src="happy.jpg" style="margin-top: 1em; max-width: 50%">
+
+# *@*<a href="http://github.com/torgeir" style="color: white">torgeir</a>
 ---
 template: part
-# *@*<a href="http://github.com/torgeir" style="color: white">torgeir</a>
-.left[
+.left.pull-left[
 ## References
-- Forbes Lindsey - Control flow utopia<br>https://www.youtube.com/watch?v=qbKWsbJ76-s
-- Promise<br>https://github.com/then/promise
-- Request<br>https://github.com/mikeal/request
-- Async functions<br>http://wiki.ecmascript.org/doku.php?id=strawman:async_functions
+- <a href="https://www.youtube.com/watch?v=qbKWsbJ76-s">Forbes Lindsey - Control flow utopia</a>
+- <a href="http://calculist.org/blog/2011/12/14/why-coroutines-wont-work-on-the-web/">Why coroutines won’t work on the web</a>
+- <a href="https://github.com/then/promise">Promise</a>
+- <a href="https://github.com/mikeal/request">Request</a>
+- <a href="http://wiki.ecmascript.org/doku.php?id=strawman:async_functions">Async functions</a>
+]
+.left.pull-right[
+## More code
+- <a href="https://gist.github.com/torgeir/7527690">gist - synchronous click listener</a>
+- <a href="https://gist.github.com/torgeir/7527672">gist - parallel yield</a>
+- <a href="https://gist.github.com/torgeir/7625806">gist - list</a>
+- <a href="https://gist.github.com/torgeir/7619570">gist - option</a>
+- <a href="https://gist.github.com/torgeir/7618372">gist - maybe</a>
 ]
 </textarea>
 

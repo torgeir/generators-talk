@@ -1,29 +1,25 @@
-function runner(generator) {
-
+function runner (generator) {
   var iter = generator(move);
   move();
 
   function move (value) {
     var result = iter.next(value);
-
     if (result.done) {
       console.log(result.value);
     }
   }
 }
 
-function wait (seconds, fn) {
-  setTimeout(function () {
-    console.log('waited', seconds);
-    fn();
-  }, seconds * 1000);
-}
-
 runner(function * (next) {
-  yield wait(2, next);
-  yield wait(3, next);
+  yield setTimeout(next, 1000);
+  console.log('waited 1');
+
+  yield setTimeout(next, 2000);
+  console.log('waited 2');
+
   return 42;
 });
+
 
 var Promise = require('promise');
 var request = require('request');
@@ -42,10 +38,16 @@ function get (url) {
 var vg = get('http://www.vg.no');
 var google = get('http://www.google.com');
 
-Promise.all([vg, google]).then(function (res) {
-  console.log(res[0].substr(0, 20),
-              res[1].substr(0, 20));
-});
+Promise
+  .all([vg, google])
+  .then(
+    function (res) {
+      console.log(res[0].substr(0, 20),
+                  res[1].substr(0, 20));
+    },
+    function (error) {
+      console.error("something blew up", error);
+    });
 
 function async (generator) {
   var iterator = generator();
@@ -77,6 +79,6 @@ async(function * () {
     console.log('google', google.substr(0, 30));
   }
   catch (error) {
-    console.log('something blew up');
+    console.error('something blew up', error);
   }
 });
