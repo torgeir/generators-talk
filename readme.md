@@ -1,5 +1,7 @@
 ## BartJS generators-talk
 
+<a href="http://bit.ly/es6-generators">Slides</a>
+
 ### Examples require node > 0.11:
 
     npm install
