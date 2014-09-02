@@ -17,7 +17,7 @@ function async (generator) {
 
   function move (result) {
     if (result.done) {
-      result.value;
+      return result.value;
     }
 
     return result.value.then(
